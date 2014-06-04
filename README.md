@@ -70,11 +70,15 @@ Require the javascript plugin :
 You can now use the service from Javascript :
 
 ```javascript
+// Initialize the previewer
 preview = new UrlPreview({
   beforeSend: function() { /* e.g. Tell user he's going to wait for the preview to load */ },
   callback: function(data) { /* Use retrieved JSON data here */ },
   error: function() { /* Called when the preview was not found */ }
-})
+});
+
+// Process an URL
+preview.process("https://www.youtube.com/watch?v=MctDZR5vGdQ&feature=kp")
 ```
 
 ## Licence

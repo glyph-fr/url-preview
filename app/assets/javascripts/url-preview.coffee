@@ -6,7 +6,7 @@ class @UrlPreview
     @options = options
     @serviceUrl = '/url-preview'
 
-  process: (str, callback) ->
+  process: (str) ->
     if !(url = @parseStr(str))
       @lastRequest.url = null
       @previewNotFound()
@@ -17,7 +17,7 @@ class @UrlPreview
     @options.beforeSend?()
     # Keep last url for future preview requests
     @lastRequest.url = url
-    @requestPreview(url, callback)
+    @requestPreview(url)
 
   # Parsing
   # Checking if str matches url regex
@@ -28,7 +28,7 @@ class @UrlPreview
   # Send request to remote service
   requestPreview: (url, callback) ->
     $.getJSON(@serviceUrl, url: url)
-      .done((resp) => @processResponse(resp, callback))
+      .done((resp) => @processResponse(resp))
 
   # Response handling
   processResponse: (resp) ->
