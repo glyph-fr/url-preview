@@ -1,6 +1,6 @@
 class @UrlPreview
-  URL_PATTERN = /\b(https?:\/\/[^\s]+)\b/i
-
+  URL_PATTERN = /((https?:\/\/)|([-a-zA-Z0-9@:%._\+~#=]+\.))?[-a-zA-Z0-9@%._\+~#=]{2,256}\.[a-z]{2,10}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g
+  
   constructor: (options) ->
     @reset()
     @options = options
@@ -23,7 +23,9 @@ class @UrlPreview
   # Checking if str matches url regex
   parseStr: (str) ->
     urls = str.match(URL_PATTERN)
-    return urls[1] if urls
+    if urls
+      "http://".concat(urls[0]) unless urls[0].match(/https?:\/\//)
+      return urls[0] 
 
   # Send request to remote service
   requestPreview: (url, callback) ->
