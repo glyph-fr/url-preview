@@ -25,7 +25,7 @@ module UrlPreview
 
     def add_image path
       path = URI.parse(URI.encode((path || "").strip))
-      images << URI.join(source_url, path)
+      images << URI.join(source_url, path).to_s
     end
 
     def valid?
