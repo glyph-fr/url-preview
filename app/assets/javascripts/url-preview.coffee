@@ -1,17 +1,19 @@
 class @UrlPreview
   URL_PATTERN = /((https?:\/\/)|([-a-zA-Z0-9@:%._\+~#=]+\.))?[-a-zA-Z0-9@%._\+~#=]{2,256}\.[a-z]{2,10}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g
-  
+
   constructor: (options) ->
     @reset()
     @options = options
     @serviceUrl = '/url-preview'
 
   process: (str) ->
+    # If the string is not an URL, return as if it wasn't found
     if !(url = @parseStr(str))
       @lastRequest.url = null
       @previewNotFound()
       return
-    else if @lastRequest.url == url
+    # Avoid fetching back the same URL
+    else if @lastRequest.url is url
       return
 
     @options.beforeSend?()
@@ -25,12 +27,13 @@ class @UrlPreview
     urls = str.match(URL_PATTERN)
     if urls
       "http://".concat(urls[0]) unless urls[0].match(/https?:\/\//)
-      return urls[0] 
+      return urls[0]
 
   # Send request to remote service
   requestPreview: (url, callback) ->
     $.getJSON(@serviceUrl, url: url)
       .done((resp) => @processResponse(resp))
+      .fail(=> @previewNotFound())
 
   # Response handling
   processResponse: (resp) ->
