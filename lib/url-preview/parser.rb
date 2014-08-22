@@ -15,7 +15,13 @@ module UrlPreview
 
     def process url
       @url = URI.encode((url || "").strip)
-      @response = Curl::Easy.perform(url) { |c| c.follow_location = true }
+
+      @response = begin
+        Curl::Easy.perform(url) { |c| c.follow_location = true }
+      rescue Curl::Err::HostResolutionError
+        return resource
+      end
+
       # Return nil when page errored
       return resource unless response.response_code < 400
 
