@@ -1,5 +1,5 @@
 class @UrlPreview
-  URL_PATTERN = /((https?:\/\/)|([-a-zA-Z0-9@:%._\+~#=]+\.))?[-a-zA-Z0-9@%._\+~#=]{2,256}\.[a-z]{2,10}\b([-a-zA-Z0-9@:%_\+.~#?&=]*)/g
+  URL_PATTERN = /(((https?:\/\/)|([-a-zA-Z0-9@:%._\+~#=]+\.))?[-a-zA-Z0-9@%._\+~#=]{2,256}\.[a-z]{2,10}\b([-a-zA-Z0-9@:%_\+.~#?&=]*)([^\s]+)?)/g
 
   constructor: (options) ->
     @reset()
