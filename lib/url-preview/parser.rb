@@ -17,15 +17,18 @@ module UrlPreview
       @url = URI.encode((url || "").strip)
 
       @response = begin
-        Curl::Easy.perform(url) { |c| c.follow_location = true }
-      rescue Curl::Err::HostResolutionError
+        Curl::Easy.perform(url) do |curl|
+          curl.follow_location = true
+          curl.headers["User-Agent"] = "url-previewer/0.1"
+        end
+      rescue Curl::Err::HostResolutionError => e
         return resource
       end
 
       # Return nil when page errored
-      return resource unless response.response_code < 400
+      return resource unless @response.response_code < 400
 
-      @source = response.body_str
+      @source = @response.body_str
 
       parser = parser_for(@response).new(source, url, resource)
       parser.process
