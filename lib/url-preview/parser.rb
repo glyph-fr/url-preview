@@ -29,7 +29,6 @@ module UrlPreview
       return resource unless @response.response_code < 400
 
       @source = @response.body_str
-
       parser = parser_for(@response).new(source, url, resource)
       parser.process
       parser.resource
@@ -40,6 +39,8 @@ module UrlPreview
     def parser_for(response)
       case response.content_type
       when /text\/html/
+        UrlPreview::Parsers::HTML
+      when /application\/xhtml\+xml/
         UrlPreview::Parsers::HTML
       when /image\/\w+/
         UrlPreview::Parsers::Image
